@@ -10,7 +10,8 @@ import { UNIVERSAL_OPTIONS } from '@pnpm/common-cli-options-help'
 import { type Config, getOptionsFromRootManifest, types as allTypes } from '@pnpm/config'
 import { PnpmError } from '@pnpm/error'
 import { findWorkspaceDir } from '@pnpm/find-workspace-dir'
-import { arrayOfWorkspacePackagesToMap, findWorkspacePackages } from '@pnpm/workspace.find-packages'
+import { arrayOfWorkspacePackagesToMap } from '@pnpm/get-context'
+import { findWorkspacePackages } from '@pnpm/workspace.find-packages'
 import { type StoreController } from '@pnpm/package-store'
 import { createOrConnectStoreControllerCached, type CreateStoreControllerOptions } from '@pnpm/store-connection-manager'
 import {
@@ -202,7 +203,7 @@ export async function handler (
 
       const pkgsFoundInWorkspace = workspacePackagesArr
         .filter(({ manifest }) => manifest.name && pkgNames.includes(manifest.name))
-      pkgsFoundInWorkspace.forEach((pkgFromWorkspace) => pkgPaths.push(pkgFromWorkspace.dir))
+      pkgsFoundInWorkspace.forEach((pkgFromWorkspace) => pkgPaths.push(pkgFromWorkspace.rootDir))
 
       if ((pkgsFoundInWorkspace.length > 0) && !linkOpts.targetDependenciesField) {
         linkOpts.targetDependenciesField = 'dependencies'
